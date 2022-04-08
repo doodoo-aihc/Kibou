@@ -5,7 +5,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Waifus from '../../interfaces/Waifus';
+import Waifus from '../interfaces/Waifus';
 import { CardMedia } from '@mui/material';
 
 export default function WaifuCard(props: WaifuCardProps) {
