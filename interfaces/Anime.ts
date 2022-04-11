@@ -27,7 +27,7 @@ export default interface Anime {
 }
 
 type MediaTitle = {
-    romanji?: string
+    romaji?: string
     english?: string
     native?: string
 }
