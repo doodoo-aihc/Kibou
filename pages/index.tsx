@@ -1,66 +1,88 @@
-import { Container, Grid } from '@mui/material'
+// utils
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
-import Waifus from '../interfaces/Waifus'
-import styles from '../styles/Home.module.css'
-import WaifuCard from '../components/WaifusList'
-
-import { gql } from "@apollo/client";
 import client from "../lib/apollo-client";
+
+// Interfaces
 import Anime from '../interfaces/Anime'
+// Components
+import { Grid, Typography } from '@mui/material'
+import AniSections from '../components/landing-page/AniSections'
+import KibouContainer from '../components/KibouContainer';
+import HeaderContainer from '../components/landing-page/HeaderContainer';
+// Queries
+import { landingPageQueryVars, LANDING_PAGE_QUERY } from '../queries/landing-page-queries';
+import LandingSection from '../interfaces/LandingSection';
 
 interface IndexProps {
-	animes: Anime[]
+	sections: LandingSection[]
 }
 
-const Home: NextPage<IndexProps> = ({ animes }) => {
+const Home: NextPage<IndexProps> = ({ sections }) => {
 	return (
-		<div className={styles.container}>
+		<>
 			<Head>
 				<title>Kibou</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-
-			<>
-				<Container>
-					<Grid spacing={2} direction="row" container>
-						{animes.map((anime: Anime, idx: number) => (
-						<Grid item xs={4} key={idx}>
-							<WaifuCard anime={anime}/>
-						</Grid>
-						))}
-					</Grid>
-				</Container>
-			</>
-		</div>
+			{
+				sections.map((section: LandingSection, idx: number) => (
+					<div key={idx}>
+						<HeaderContainer>
+							<Typography variant='h5'>{section.headerTitle}</Typography>
+						</HeaderContainer>
+						<KibouContainer>
+							<Grid direction="row" justifyContent="space-between" container xl>
+								{section.animes.map((anime: Anime, idx: number) => (
+									<Grid item xl={2} key={idx}>
+										<AniSections anime={anime}/>
+									</Grid>
+								))}
+							</Grid>
+						</KibouContainer>
+					</div>
+				))
+			}
+		</>
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps () {
 	const { data } = await client.query({
-		query: gql`
-			query($page: Int = 1, $type: MediaType = ANIME, $sort: [MediaSort] = [TRENDING_DESC]) {
-				Page(page: $page, perPage: 10) {
-					media(type: $type, sort: $sort) {
-						title {
-							romaji,
-							native,
-						},
-						coverImage {
-							large
-						}
-					}
-				}
-			}
-		`
+		query: LANDING_PAGE_QUERY,
+		variables: landingPageQueryVars
 	})
 
-	const animes : Anime[] = data['Page']['media']
+	const trendingAnimes : LandingSection = {
+		animes: data['trending']['media'],
+		headerTitle: "Trending Now"
+	}
+	const popularAnimes : LandingSection = {
+		animes: data['season']['media'],
+		headerTitle: "Popular This Season"
+	}
+	const trendingSeasonAnimes : LandingSection = {
+		animes: data['nextSeason']['media'],
+		headerTitle: "Upcoming Next Season"
+	}
+	const trendingNextSeasonAnimes : LandingSection = {
+		animes: data['popular']['media'],
+		headerTitle: "All Time Popular"
+	}
+	const topAnimes : LandingSection = {
+		animes: data['top']['media'],
+		headerTitle: "Top 100 Anime"
+	}
 
 	return {
 		props: {
-			animes: animes
+			sections: [
+				trendingAnimes,
+				popularAnimes,
+				trendingSeasonAnimes,
+				trendingNextSeasonAnimes,
+				topAnimes
+			]
 		}
 	}
 }

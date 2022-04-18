@@ -30,6 +30,7 @@ type MediaTitle = {
     romaji?: string
     english?: string
     native?: string
+    userPreferred?: string
 }
 
 type FuzzyDate = {
@@ -53,7 +54,6 @@ type MediaTag = {
     rank?: number
     isGeneralSpoiler?: boolean
     isMediaSpoiler?: boolean
-
 }
 
 enum MediaFormat {

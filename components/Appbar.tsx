@@ -18,21 +18,25 @@ import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import TvIcon from '@mui/icons-material/Tv';
 import PersonIcon from '@mui/icons-material/Person';
+import Link from 'next/link';
 
 const drawerWidth = 240;
 
-const MenuList: { label: string, icon: React.ReactElement<any, any>}[] = [
+const MenuList: { label: string, icon: React.ReactElement<any, any>, href: string }[] = [
     {
         label: "Home",
-        icon: <HomeIcon />
+        icon: <HomeIcon />,
+        href: "/"
     },
     {
         label: "Watch",
-        icon: <TvIcon />
+        icon: <TvIcon />,
+        href: "/"
     },
     {
         label: "Profile",
-        icon: <PersonIcon />
+        icon: <PersonIcon />,
+        href: "/"
     }
 ]
 
@@ -148,31 +152,39 @@ export default function MiniDrawer(props: any) {
         <Divider />
         <List>
             {MenuList.map((item) => (
-                <ListItemButton
-                key={item.label}
-                sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                }}
-                >
-                <ListItemIcon
-                    sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                    }}
-                >
-                    {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.label} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
+                <Link href={item.href} key={item.label} passHref>
+                    <ListItemButton
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                        }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : 'auto',
+                            justifyContent: 'center',
+                            }}
+                        >
+                            {item.icon}
+                        </ListItemIcon>
+                        <ListItemText primary={item.label} sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>                
+                </Link>
 
             ))}
         </List>
         <Divider />
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{
+        flexGrow: 1,
+        p: 3,
+        marginLeft: `calc(${theme.spacing(7)}+ 1px)`,
+        [theme.breakpoints.up('sm')]: {
+          marginLeft: `calc(${theme.spacing(8)} + 1px)`,
+        },
+      }}>
         <DrawerHeader />
         {props.children}
       </Box>

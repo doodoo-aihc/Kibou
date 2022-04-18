@@ -10,7 +10,6 @@ import '@fontsource/roboto/700.css';
 
 import createEmotionCache from '../utility/createEmotionCache';
 import lightThemeOptions from '../styles/themes/lightThemeOptions';
-import '../styles/globals.css';
 
 import Appbar from '../components/Appbar';
 interface MyAppProps extends AppProps {
