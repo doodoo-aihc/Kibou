@@ -1,6 +1,6 @@
-import Anime from "./Anime";
+import Anime from "./Anime"
 
 export default interface LandingSection {
-    animes: Anime[],
-    headerTitle: string
+	animes: Anime[]
+	headerTitle: string
 }

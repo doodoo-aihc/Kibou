@@ -1,10 +1,10 @@
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router"
 
 const Anime = () => {
-    const router = useRouter()
-    const { id } = router.query
+	const router = useRouter()
+	const { id } = router.query
 
-    return <p>Anime: {id}</p>
+	return <p>Anime: {id}</p>
 }
 
 export default Anime
